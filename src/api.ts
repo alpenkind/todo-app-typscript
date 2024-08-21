@@ -1,6 +1,6 @@
 import { Todo } from "./todo";
 import { todos } from "./storage";
-const urlAPI = "http://localhost:4730/todos/";
+const urlAPI = "http://localhost:3000/todos/";
 
 // Function which loads Data from Backend
 async function loadFromAPI() {
@@ -68,10 +68,16 @@ async function updateToAPI(todo: Todo) {
     console.error("Error updating todo on API:", error);
   }
 }
-function removeFromAPI(todoId: number) {
-  return fetch(urlAPI + todoId, {
+async function removeFromAPI(todoId: number) {
+  const url = urlAPI + todoId;
+  console.log("DELETE URL:", url);
+  const response = await fetch(urlAPI + todoId, {
     method: "DELETE",
   });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete todo from backend.");
+  }
 }
 
 export { urlAPI, loadFromAPI, sendToAPI, updateToAPI, removeFromAPI };
